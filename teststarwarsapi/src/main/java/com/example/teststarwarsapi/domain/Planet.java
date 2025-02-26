@@ -1,17 +1,15 @@
 package com.example.teststarwarsapi.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "planets")
-@NoArgsConstructor
-@AllArgsConstructor
 public class Planet {
 
     @Id
@@ -20,6 +18,14 @@ public class Planet {
     private String name;
     private String climate;
     private String terrain;
+
+    public Planet() {}
+
+    public Planet(String name, String climate, String terrain) {
+        this.name = name;
+        this.climate = climate;
+        this.terrain = terrain;
+    }
 
     public Planet(String climate, String terrain) {
         this.climate = climate;
@@ -51,8 +57,10 @@ public class Planet {
         this.terrain = terrain;
     }
 
-    // @Override
-    // public boolean equals(Object obj){
-    //     return EqualsBuilder.reflectionEquals(obj, this);
-    // }
+    //Compara se os objetos têm o mesmo valor em todos os seus campos
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj, this);
+    }
+
 }
