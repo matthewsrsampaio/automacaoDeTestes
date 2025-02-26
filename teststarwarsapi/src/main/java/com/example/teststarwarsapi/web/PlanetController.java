@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.teststarwarsapi.domain.Planet;
 import com.example.teststarwarsapi.domain.PlanetService;
+
 
 
 @RestController
@@ -31,18 +33,34 @@ public class PlanetController {
 
     @GetMapping
     public ResponseEntity<List<Planet>> getAll() {
-    List<Planet> planets = planetService.findAllPlanets();
+    List<Planet> planets = planetService.getAllPlanets();
     return ResponseEntity.ok(planets);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Planet> findPlanetById(@PathVariable Long id) {
-        Planet planet = planetService.findPlanetById(id);
-        if (planet != null) {
-            return ResponseEntity.ok(planet);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }   
+    public ResponseEntity<Planet> get(@PathVariable("id") Long id) {
+        // Planet planet = planetService.findPlanetById(id);
+        // if (planet != null) {
+        //     return ResponseEntity.ok(planet);
+        // } else {
+        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        // }
+        return planetService.getPlanetById(id).map(planet -> ResponseEntity.ok(planet))
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Planet> getPlanetByName(@PathVariable("name") String name) {
+        return planetService.getPlanetByName(name).map(planet -> ResponseEntity.ok(planet))
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Planet>> list(@RequestParam(required = false) String terrain,
+                                             @RequestParam(required = false) String climate
+    ) {
+        List<Planet> planets = planetService.list(terrain, climate);
+        return ResponseEntity.ok(planets);
+    }
     
 }

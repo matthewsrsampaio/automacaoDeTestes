@@ -1,7 +1,9 @@
 package com.example.teststarwarsapi.domain;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +19,21 @@ public class PlanetService {
         return planetRepository.save(planet);
     }
 
-    public List<Planet> findAllPlanets() {
+    public List<Planet> getAllPlanets() {
         return (List<Planet>) planetRepository.findAll();
     }
 
-    public Planet findPlanetById(Long id) {
-        return planetRepository.findById(id).orElse(null);
+    public Optional<Planet> getPlanetById(Long id) {
+        return planetRepository.findById(id);
     }
+
+    public Optional<Planet> getPlanetByName(String name) {
+        return planetRepository.findByName(name);
+    }
+
+    public List<Planet> list(String terrain, String climate) {
+        Example<Planet> query = QueryBuilder.makeQuery(new Planet(climate, terrain));
+        return planetRepository.findAll(query);
+    }
+    
 }
