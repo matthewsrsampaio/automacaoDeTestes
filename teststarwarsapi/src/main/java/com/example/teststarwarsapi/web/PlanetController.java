@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +40,6 @@ public class PlanetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Planet> get(@PathVariable("id") Long id) {
-        // Planet planet = planetService.findPlanetById(id);
-        // if (planet != null) {
-        //     return ResponseEntity.ok(planet);
-        // } else {
-        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        // }
         return planetService.getPlanetById(id).map(planet -> ResponseEntity.ok(planet))
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -61,6 +56,12 @@ public class PlanetController {
     ) {
         List<Planet> planets = planetService.list(terrain, climate);
         return ResponseEntity.ok(planets);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
+        planetService.remove(id);
+        return ResponseEntity.noContent().build();
     }
     
 }
