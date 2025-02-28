@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.teststarwarsapi.domain.Planet;
 import com.example.teststarwarsapi.domain.PlanetService;
 
-
-
 @RestController
 @RequestMapping("/planets")
 public class PlanetController {
@@ -32,7 +30,7 @@ public class PlanetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(planetCreated);
     }
 
-    @GetMapping
+    @GetMapping("/all")	
     public ResponseEntity<List<Planet>> getAll() {
     List<Planet> planets = planetService.getAllPlanets();
     return ResponseEntity.ok(planets);

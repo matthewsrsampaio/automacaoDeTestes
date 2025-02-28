@@ -46,4 +46,13 @@ public class PlanetRepositoryTest {
         assertThatThrownBy(() -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
     }
 
+    @Test
+    public void create_PlanetWithExistingName_ThrowsException() {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+        testEntityManager.detach(planet); //Desassocio o planeta do contexto de persistência, do monitoramento do hibernate. Porque o hibernate cria um monitoramento ao vivo, quando eu tento recriar o planeta pra realizar o meu teste o hibernate sabendo que aquele planeta ja existe e que tem um ID vai apenas atualizá-lo.
+        planet.setId(null);
+
+        assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
+    }
+
 }
