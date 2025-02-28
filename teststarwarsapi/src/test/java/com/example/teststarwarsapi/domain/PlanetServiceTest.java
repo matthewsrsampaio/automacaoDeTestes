@@ -22,8 +22,10 @@ import org.springframework.data.domain.Example;
 import static common.PlanetConstants.INVALID_PLANET;
 import static common.PlanetConstants.PLANET;
 
-@ExtendWith(MockitoExtension.class)
+//T E S T E S    D E    U N I D A D E
+
 //@SpringBootTest(classes = PlanetService.class) //=>Ao usar esta anotação do SpringBoot, o sistema pode se tornar ineficiente ao escalar o projeto.
+@ExtendWith(MockitoExtension.class)
 public class PlanetServiceTest {
 
     //A nomenclatura no testes seguirão esse padrão:

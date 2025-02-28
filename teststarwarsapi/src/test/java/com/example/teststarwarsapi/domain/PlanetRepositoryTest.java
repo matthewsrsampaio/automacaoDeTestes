@@ -1,0 +1,49 @@
+package com.example.teststarwarsapi.domain;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import static common.PlanetConstants.PLANET;
+
+//T E S T E S    D E     I M P L E M E N T A Ç Ã O
+
+// @SpringBootTest(classes = PlanetRepository.class)
+@DataJpaTest
+public class PlanetRepositoryTest {
+    @Autowired
+    private PlanetRepository planetRepository;
+
+    @Autowired
+    private TestEntityManager testEntityManager; //Interagir com o banco de dados sem ser via repositório
+
+    @Test
+    public void createPlanet_WithValidData_ReturnPlanet() {
+        //criou o planeta
+        Planet planet = planetRepository.save(PLANET);
+
+        //Verifica se o planeta foi criado
+        Planet sut = testEntityManager.find(Planet.class, PLANET.getId());
+
+        System.out.println(planet);
+
+        assertThat(sut).isNotNull();
+        assertThat(sut.getName()).isEqualTo(PLANET.getName());
+        assertThat(sut.getClimate()).isEqualTo(PLANET.getClimate());
+        assertThat(sut.getTerrain()).isEqualTo(PLANET.getTerrain());
+
+    }
+
+    @Test
+    public void createPlanet_WithInvalidData_ThrowsException() {
+        Planet emptyPlanet = new Planet();
+        Planet invalidPlanet = new Planet("", "", "");
+
+        assertThatThrownBy(() -> planetRepository.save(emptyPlanet)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
+    }
+
+}
