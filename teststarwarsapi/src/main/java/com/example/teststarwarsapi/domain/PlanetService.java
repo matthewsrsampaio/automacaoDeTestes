@@ -37,9 +37,7 @@ public class PlanetService {
     }
 
     public void remove(Long id) {
-        planetRepository.deleteById(id);
-        // var planet = planetRepository.findById(id);
-        // planet.ifPresent(planetRepository::delete);
+        planetRepository.deleteById(id);;
     }
     
 }

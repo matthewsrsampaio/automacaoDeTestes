@@ -125,4 +125,22 @@ public class PlanetRepositoryTest {
         assertThat(response).isEmpty();
     }
 
+    @Test
+    public void removePlanet_WithExistingId_RemovesPlanetFromDatabase() {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+
+        planetRepository.deleteById(planet.getId());
+
+        Planet removedPlanet = testEntityManager.find(Planet.class, planet.getId());
+        assertThat(removedPlanet).isNull();
+    }
+
+    //Esse método é para testar se o método remove está lançando a exceção EmptyResultDataAccessException}
+    //No entanto, o método deleteById() não retorna mais essa exceção, então o teste não faz mais sentido
+    // @Test
+    // public void removePlanet_WithUnexistingId_ThrowsException() {
+    //     assertThatThrownBy(() -> planetRepository.deleteById(1L))
+    //         .isInstanceOf(EmptyResultDataAccessException.class);
+    // }
+
 }

@@ -15,3 +15,4 @@ public interface PlanetRepository extends CrudRepository<Planet, Long>, QueryByE
     @Override
     <S extends Planet> List<S> findAll(Example<S> example);
 }
+
