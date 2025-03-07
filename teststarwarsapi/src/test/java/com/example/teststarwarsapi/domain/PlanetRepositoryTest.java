@@ -1,5 +1,6 @@
 package com.example.teststarwarsapi.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,8 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Example;
+import org.springframework.test.context.jdbc.Sql;
 
 import static common.PlanetConstants.PLANET;
+import static common.PlanetConstants.PLANETS;
+import static common.PlanetConstants.TATOOINE;
 
 //T E S T E S    D E     I M P L E M E N T A Ç Ã O
 
@@ -77,6 +82,47 @@ public class PlanetRepositoryTest {
         Optional<Planet> planetOpt = planetRepository.findById(1L);
 
         assertThat(planetOpt).isEmpty();
+    }
+
+    @Test
+    public void getPlanet_ByExistingName_ReturnsPlanet() throws Exception {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+        Optional<Planet> planetOpt = planetRepository.findByName(planet.getName());
+
+        assertThat(planetOpt).isNotEmpty();
+        assertThat(planetOpt.get()).isEqualTo(planet);
+    }
+
+    @Test
+    public void getPlanetUnexistingName_ReturnsNotFound() throws Exception {
+        Optional<Planet> planetOpt = planetRepository.findByName("Tatooine");
+
+        assertThat(planetOpt).isEmpty();
+    }
+
+    @Sql(scripts = "/import_planets.sql")
+    @Test
+    public void listPLanets_ReturnsFilteredPlanets() {
+        Example<Planet> queryWithoutFilters = QueryBuilder.makeQuery(new Planet());
+        Example<Planet> queryWithFilters = QueryBuilder.makeQuery(new Planet(TATOOINE.getClimate(), TATOOINE.getTerrain()));
+
+        List<Planet> responseWithoutFilters = planetRepository.findAll(queryWithoutFilters);
+        List<Planet> responseWithFilters = planetRepository.findAll(queryWithFilters);
+
+        assertThat(responseWithoutFilters).isNotEmpty();
+        assertThat(responseWithoutFilters).hasSize(PLANETS.size());
+        assertThat(responseWithFilters).isNotEmpty();
+        assertThat(responseWithFilters).hasSize(1);
+        assertThat(responseWithFilters.get(0)).isEqualTo(TATOOINE);        
+    }
+
+    @Test
+    public void listPlanets_ReturnsNoPlanets() {
+        Example<Planet> query = QueryBuilder.makeQuery(new Planet());
+
+        List<Planet> response = planetRepository.findAll(query);
+
+        assertThat(response).isEmpty();
     }
 
 }
