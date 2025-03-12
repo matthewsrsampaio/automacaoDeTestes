@@ -18,6 +18,9 @@ import static common.PlanetConstants.PLANETS;
 import static common.PlanetConstants.TATOOINE;
 
 //T E S T E S     S U B C U T Â N E O S
+//TO run all: mvn clean test verify
+//To run only subcutaneos: mvn clean test verify -Dsurefire.skip=true
+//To run only testes de unidade: mvn clean verify -DskipITs=true ou mvn clean test
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)

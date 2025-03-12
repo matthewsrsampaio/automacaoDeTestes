@@ -24,6 +24,10 @@ import static common.PlanetConstants.PLANET;
 
 //T E S T E S    D E    U N I D A D E
 
+//TO run all: mvn clean test verify
+//To run only subcutaneos: mvn clean test verify -Dsurefire.skip=true
+//To run only testes de unidade: mvn clean verify -DskipITs=true ou mvn clean test
+
 //@SpringBootTest(classes = PlanetService.class) //=>Ao usar esta anotação do SpringBoot, o sistema pode se tornar ineficiente ao escalar o projeto.
 @ExtendWith(MockitoExtension.class)
 public class PlanetServiceTest {

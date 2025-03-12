@@ -19,6 +19,10 @@ import static common.PlanetConstants.TATOOINE;
 
 //T E S T E S    D E     I M P L E M E N T A Ç Ã O
 
+//TO run all: mvn clean test verify
+//To run only subcutaneos: mvn clean test verify -Dsurefire.skip=true
+//To run only testes de unidade: mvn clean verify -DskipITs=true ou mvn clean test
+
 // @SpringBootTest(classes = PlanetRepository.class)
 @DataJpaTest
 public class PlanetRepositoryTest {

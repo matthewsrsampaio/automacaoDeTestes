@@ -30,6 +30,10 @@ import static common.PlanetConstants.PLANET;
 import static common.PlanetConstants.PLANETS;
 import static common.PlanetConstants.TATOOINE;
 
+//TO run all: mvn clean test verify
+//To run only subcutaneos: mvn clean test verify -Dsurefire.skip=true
+//To run only testes de unidade: mvn clean verify -DskipITs=true ou mvn clean test
+
 @WebMvcTest(PlanetController.class)
 public class PlanetControllerTest {
 
