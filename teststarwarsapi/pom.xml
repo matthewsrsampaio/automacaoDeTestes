@@ -125,7 +125,36 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
+			<!--Adiciona o Jacoco para analise de cobertura -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>/com/example/teststarwarsapi/TeststarwarsapiApplication.class</exclude>
+					</excludes>
+				</configuration>
+				<!-- prepara o agente para alise de coberrtura -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+
+					<!-- Gera um relatório de cobertura -->
+					<!-- mvn clean test jacoco:report -->
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

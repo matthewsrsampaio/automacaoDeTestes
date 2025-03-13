@@ -34,8 +34,8 @@ public class PlanetController {
 
     @GetMapping("/all")	
     public ResponseEntity<List<Planet>> getAll() {
-    List<Planet> planets = planetService.getAllPlanets();
-    return ResponseEntity.ok(planets);
+        List<Planet> planets = planetService.getAllPlanets();
+        return ResponseEntity.ok(planets);
     }
 
     @GetMapping("/{id}")

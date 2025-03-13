@@ -2,6 +2,8 @@ package com.example.teststarwarsapi.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import com.example.teststarwarsapi.jacoco.ExcludeFromJacocoGeneratedReport;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -76,6 +78,7 @@ public class Planet {
         return EqualsBuilder.reflectionEquals(obj, this);
     }
 
+    @ExcludeFromJacocoGeneratedReport
     @Override
     public String toString() {
         return "Planet [id = " + id + ", name = " + name + ", climate = " + climate + ", terrain = " + terrain + "]";

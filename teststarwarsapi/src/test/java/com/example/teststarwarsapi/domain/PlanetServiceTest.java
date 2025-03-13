@@ -21,6 +21,7 @@ import org.springframework.data.domain.Example;
 
 import static common.PlanetConstants.INVALID_PLANET;
 import static common.PlanetConstants.PLANET;
+import static common.PlanetConstants.PLANETS;
 
 //T E S T E S    D E    U N I D A D E
 
@@ -103,6 +104,22 @@ public class PlanetServiceTest {
         Optional<Planet> sut = planetService.getPlanetByName(fail);
 
         assertThat(sut).isEmpty();
+    }
+
+    @Test
+    public void getAllPlanets_ReturnsAllPlanets() {
+        List<Planet> planets = new ArrayList<>() {
+            {
+                addAll(PLANETS);
+            }
+        };
+        when(planetService.getAllPlanets()).thenReturn(planets);
+
+        List<Planet> sut = planetService.getAllPlanets();
+
+        assertThat(sut).isNotEmpty();
+        assertThat(sut).hasSize(PLANETS.size());
+    
     }
 
     @Test

@@ -140,6 +140,16 @@ public class PlanetControllerTest {
     }
 
     @Test
+    public void getAllPlanets_ReturnsAllPlanets() throws Exception {
+        when(planetService.getAllPlanets()).thenReturn(PLANETS);
+
+        mockMvc
+            .perform(get("/planets/all"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(PLANETS.size())));
+    }
+
+    @Test
     public void listPlanet_ReturnsNoPlanets() throws Exception {
         when(planetService.list(null, null)).thenReturn(Collections.emptyList());
 
