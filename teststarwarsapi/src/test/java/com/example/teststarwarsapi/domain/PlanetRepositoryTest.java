@@ -2,11 +2,15 @@ package com.example.teststarwarsapi.domain;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -32,6 +36,25 @@ public class PlanetRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager; //Interagir com o banco de dados sem ser via repositório
 
+    private static Stream<Arguments> providesInvalidPlanet() {
+        return Stream.of(
+            Arguments.of(new Planet("", "", "")), // Todos os campos vazios
+            Arguments.of(new Planet("Tatooine", "", "")), // Clima e terreno vazios
+            Arguments.of(new Planet("", "Arid", "")), // Nome e terreno vazios
+            Arguments.of(new Planet("", "", "Desert")), // Nome e clima vazios
+            Arguments.of(new Planet("Tatooine", "Arid", "")), // Terreno vazio
+            Arguments.of(new Planet("Tatooine", "", "Desert")), // Clima vazio
+            Arguments.of(new Planet("", "Arid", "Desert")), // Nome vazio
+            Arguments.of(new Planet(null, null, null)), // Todos os campos nulos
+            Arguments.of(new Planet("Tatooine", null, null)), // Clima e terreno nulos
+            Arguments.of(new Planet(null, "Arid", null)), // Nome e terreno nulos
+            Arguments.of(new Planet(null, null, "Desert")), // Nome e clima nulos
+            Arguments.of(new Planet("Tatooine", "Arid", null)), // Terreno nulo
+            Arguments.of(new Planet("Tatooine", null, "Desert")), // Clima nulo
+            Arguments.of(new Planet(null, "Arid", "Desert")) // Nome nulo
+            );
+    }
+
     @AfterEach
     public void afterEach() {
         PLANET.setId(null);
@@ -54,13 +77,10 @@ public class PlanetRepositoryTest {
 
     }
 
-    @Test
-    public void createPlanet_WithInvalidData_ThrowsException() {
-        Planet emptyPlanet = new Planet();
-        Planet invalidPlanet = new Planet("", "", "");
-
-        assertThatThrownBy(() -> planetRepository.save(emptyPlanet)).isInstanceOf(RuntimeException.class);
-        assertThatThrownBy(() -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
+    @ParameterizedTest
+    @MethodSource("providesInvalidPlanet")
+    public void createPlanet_WithInvalidData_ThrowsException(Planet planet) {
+        assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
     }
 
     @Test
